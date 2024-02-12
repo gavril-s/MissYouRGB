@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "server"
+version = "0.1.0"
+description = ""
+authors = ["gavril-s <gavril.senkevich@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+uvicorn = "^0.27.1"
+fastapi = "^0.109.2"
+python-dotenv = "^1.0.1"
+common = {path = "../common", develop=true}
+confluent-kafka = "^2.3.0"
+pydantic = "^2.6.1"
+psycopg2-binary = "^2.9.9"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

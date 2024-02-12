@@ -1,0 +1,63 @@
+version: '3'
+
+dotenv: ['.env']
+
+tasks:
+  run-server:
+    dir: 'server'
+    cmds:
+      - poetry run python server/server.py
+  format-server:
+    dir: 'server'
+    cmds:
+      - poetry run python -m black .
+  build-server:
+    cmds:
+      - sudo docker build --build-arg port=$SERVER_PORT -t miss-you-rgb-server -f ./server/Dockerfile .
+  run-server-container:
+    dir: 'server'
+    cmds:
+      - ./set_env_for_build.sh
+      - sudo docker compose up -d
+
+  run-client:
+    dir: 'client'
+    cmds:
+      - poetry run python client/client.py
+  format-client:
+    dir: 'client'
+    cmds:
+      - poetry run python -m black .
+  build-client:
+    cmds:
+      - sudo docker build -t miss-you-rgb-client -f ./client/Dockerfile .
+  run-client-container:
+    cmds:
+      - sudo docker run -d miss-you-rgb-client
+
+  run-bot:
+    dir: 'bot'
+    cmds:
+      - poetry run python bot/bot.py
+  format-bot:
+    dir: 'bot'
+    cmds:
+      - poetry run python -m black .
+  build-bot:
+    cmds:
+      - sudo docker build -t miss-you-rgb-bot -f ./bot/Dockerfile .
+  run-bot-container:
+    cmds:
+      - sudo docker run -d miss-you-rgb-bot
+
+  format-common:
+    dir: 'common'
+    cmds:
+      - poetry run python -m black .
+
+  format:
+    cmds:
+      - task: format-server
+      - task: format-client
+      - task: format-bot
+      - task: format-common
